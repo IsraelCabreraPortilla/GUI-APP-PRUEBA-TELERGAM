@@ -7,6 +7,7 @@ from datetime import datetime
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
+import time
 
 UPLOAD_FOLDER = "./static"
 
@@ -26,6 +27,8 @@ def envio_msj(id_chat, msg):
     if(r.json()['ok']):
         lista_enviados.append(r.json()['result']['chat']['title'])
         ids.append(r.json()['result']['chat']['id'])
+    time.sleep(0.01)    
+    
  
 
 
