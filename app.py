@@ -29,6 +29,7 @@ def envio_msj(id_chat, msg):
     global lista_enviados,ids,lista_con_info,cont
     r = requests.post(f'https://api.telegram.org/bot{token1}/sendMessage',
                       data={'chat_id': id_chat, 'text': msg})
+    print(r.json())
     if(r.json()['ok']):
         lista_enviados = np.append(lista_enviados, r.json()['result']['chat']['title'])
         ids = np.append(ids, r.json()['result']['chat']['id'])
@@ -116,7 +117,6 @@ def upload_file():
                 if(region == "All" and category=="All"):
                     for i in range(len(data)):
                         envio_msj(data[i]['ID_Chat'], message)
-                        print(i)
                 if(region =="All" and category!="All"):
                     for i in range(len(data)):
                         if(category == data[i]['Category']):
