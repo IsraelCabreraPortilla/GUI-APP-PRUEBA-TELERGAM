@@ -46,6 +46,12 @@ def envio_msjIMG(id_chat, msg, imagen):
                       files={'photo': (imagen, open(
                           imagen, 'rb'))},
                       data={'chat_id': id_chat, 'caption': msg})
+    print(r.json())
+    if(r.json()['ok']):
+        lista_enviados = np.append(lista_enviados, r.json()['result']['chat']['title'])
+        ids = np.append(ids, r.json()['result']['chat']['id'])
+        lista_con_info.append(f"\nSe mandó a {str(lista_enviados[-1])}, ya van {str(cont)}.")
+        cont += 1
     
    
 
