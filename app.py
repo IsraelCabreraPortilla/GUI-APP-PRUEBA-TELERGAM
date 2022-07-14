@@ -34,6 +34,7 @@ def envio_msj(id_chat, msg):
         ids = np.append(ids, r.json()['result']['chat']['id'])
         lista_con_info.append(f"\nSe mandó a {str(lista_enviados[-1])}, ya van {str(cont)}.")
         cont += 1
+        time.sleep(0.001)
         #print(lista_enviados)
         
  
@@ -45,7 +46,7 @@ def envio_msjIMG(id_chat, msg, imagen):
                       files={'photo': (imagen, open(
                           imagen, 'rb'))},
                       data={'chat_id': id_chat, 'caption': msg})
-    time.sleep(0.001)
+    
    
 
 @app.route('/', methods=["get", "post"])
