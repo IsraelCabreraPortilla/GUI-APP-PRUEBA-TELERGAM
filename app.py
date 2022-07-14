@@ -76,7 +76,6 @@ def upload_file():
 
     if request.method == 'POST':
         
-        try:
             cont = 1
             category = request.form.get("category")
             typeofmessage = request.form.get("typeofmessage")
@@ -132,11 +131,6 @@ def upload_file():
                         if(region == data[i]['Site'] and category == data[i]['Category']):
                             envio_msj(data[i]['ID_Chat'],message)
         
-            
-
-   
-
-        except Exception as e: 
-            lista_con_info.append(e)
+           
 
     return render_template('index.html', lista_con_info = lista_con_info)
