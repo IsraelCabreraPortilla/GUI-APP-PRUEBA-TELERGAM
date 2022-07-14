@@ -139,6 +139,3 @@ def upload_file():
             lista_con_info.append(e)
 
     return render_template('index.html', lista_con_info = lista_con_info)
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
