@@ -58,16 +58,16 @@ def upload_file():
         # authorize the clientsheet 
     client = gspread.authorize(cred)
         # get the sample of the Spreadsheet
-    sheet = client.open('Telegram_Chats')
-    #sheet_pruebas = client.open('Client_List')
+    #sheet = client.open('Telegram_Chats')
+    sheet_pruebas = client.open('Client_List')
 
         # get the first sheet of the Spreadsheet
-    sheet_instance = sheet.get_worksheet(0)
-    #sheet_instancepruebas = sheet_pruebas.get_worksheet(0)
+    #sheet_instance = sheet.get_worksheet(0)
+    sheet_instancepruebas = sheet_pruebas.get_worksheet(0)
         # get all the records of the data
-    records_oficial = sheet_instance.get_all_records()
-    #records_pruebas = sheet_instancepruebas.get_all_records()
-    data = records_oficial
+    #records_oficial = sheet_instance.get_all_records()
+    records_pruebas = sheet_instancepruebas.get_all_records()
+    data = records_pruebas
     print(len(data))
         
     my_list = []
