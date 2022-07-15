@@ -93,7 +93,8 @@
 <body>
     <center>
         <div>
-            <form class="formatoReporte" method="post" enctype="multipart/form-data">
+            <form class="formatoReporte" method="post" enctype="multipart/form-data"
+                action="{{url_for('upload_file')}}">
                 <section>
                     <center>
                         <h1>Send Message</h1>
@@ -153,23 +154,31 @@
                     </p>
 
                     <p>
-                        <input type="submit" value="Send Message" style="height:65px; width:140px"><br><br>
+                        <input type="hidden" id="userInput" name="userInput">
+                        <input type="submit" id="button" value="Send Message" onclick="myFunction()"
+                            style="height:65px; width:140px"><br><br>
                     </p>
 
                 </section>
             </form>
         </div>
 
-        <div>
-            <section>
-                <center>
-                    <h1>Terminal</h1>
-                </center>
+    </center>
+    <script>
+        function myFunction() {
+            var element = document.getElementById("message").value;
+            var region = document.getElementById("region").value;
+            console.log(element)
+            
+            if (confirm("Estas a punto de enviar el sig mensaje a: " + region + "\n" + element) == true) {
+                console.log("Sending Messages ......" )
+                document.getElementById("userInput").value = "True";
+            } else {
+                document.getElementById("userInput").value = "False";
+                return 0;
+            }
+        }
+    </script>
+</body>
 
-                <p>
-                    <textarea class="inputText" id="terminal" name="terminal" rows="720" cols="50">
-                        {% for i in lista_con_info %}
-                        {{i}}
-                        {% endfor %}
-                        </textarea>
-                </p>
+</html>
