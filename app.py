@@ -29,7 +29,6 @@ def envio_msj(id_chat, msg):
     global lista_enviados,ids,lista_con_info,cont
     r = requests.post(f'https://api.telegram.org/bot{token1}/sendMessage',
                       data={'chat_id': id_chat, 'text': msg})
-    print(r.json())
     if(r.json()['ok']):
         lista_enviados = np.append(lista_enviados, r.json()['result']['chat']['title'])
         ids = np.append(ids, r.json()['result']['chat']['id'])
@@ -46,16 +45,9 @@ def envio_msjIMG(id_chat, msg, imagen):
                       files={'photo': (imagen, open(
                           imagen, 'rb'))},
                       data={'chat_id': id_chat, 'caption': msg})
-    print(r.json())
-    if(r.json()['ok']):
-        lista_enviados = np.append(lista_enviados, r.json()['result']['chat']['title'])
-        ids = np.append(ids, r.json()['result']['chat']['id'])
-        lista_con_info.append(f"\nSe mandó a {str(lista_enviados[-1])}, ya van {str(cont)}.")
-        cont += 1
-    
+    time.sleep(0.001)
    
-
-@app.route('/', methods=["get", "post"])
+@app.route('/',methods = ["get","post"])
 def upload_file():
     
     # defining the scope of the application
@@ -82,60 +74,62 @@ def upload_file():
 
     if request.method == 'POST':
         
+            global userInput
             cont = 1
             category = request.form.get("category")
             typeofmessage = request.form.get("typeofmessage")
             message = request.form.get("message")
             region = request.form.get("region")
-            now = datetime.now()
-            fecha_envio = now.date()
-            hora_envio = now.time()
-            print(category, typeofmessage, message)
-            # bd.insertar_MensajeBot(typeofmessage,fecha_envio,hora_envio,message,coin,responser)
-            # el mensaje va con IMAGEN
-            if request.files['file1']:
-                file1 = request.files['file1']
-                path = os.path.join(
-                    app.config['UPLOAD_FOLDER'], file1.filename)
-                file1.save(path)
-                nameimg = path
-                # preguntemos si el mensaje es dirigido a todos los de la region
-                if(region == "All" and category=="All"):
-                    for i in range(len(data)):
-                        envio_msjIMG(data[i]['ID_Chat'], message, nameimg)
-                if(region =="All" and category!="All"):
-                    for i in range(len(data)):
-                        if(category == data[i]['Category']):
-                            envio_msjIMG(data[i]['ID_Chat'],message,nameimg)
-                if(region!="All" and category=="All"):
-                    for i in range(len(data)):
-                        if(region == data[i]['Site']):
-                            envio_msjIMG(data[i]['ID_Chat'],message,nameimg)
-                if(region!="All" and category!="All"):
-                    for i in range(len(data)):
-                        if(region == data[i]['Site'] and category == data[i]['Category']):
-                            envio_msjIMG(data[i]['ID_Chat'],message,nameimg)
-                
+            userInput = request.form.get("userInput")  
+            print(userInput) 
 
-            # el mensaje va SIN IMAGEN
-            else:
-                # es mensaje dirigido a todos
-                if(region == "All" and category=="All"):
-                    for i in range(len(data)):
-                        envio_msj(data[i]['ID_Chat'], message)
-                if(region =="All" and category!="All"):
-                    for i in range(len(data)):
-                        if(category == data[i]['Category']):
-                            envio_msj(data[i]['ID_Chat'],message)
-                if(region!="All" and category=="All"):
-                    for i in range(len(data)):
-                        if(region == data[i]['Site']):
-                            envio_msj(data[i]['ID_Chat'],message)
-                if(region!="All" and category!="All"):
-                    for i in range(len(data)):
-                        if(region == data[i]['Site'] and category == data[i]['Category']):
-                            envio_msj(data[i]['ID_Chat'],message)
+            if(userInput=="True"):
+                print(category, typeofmessage, message)
+                # bd.insertar_MensajeBot(typeofmessage,fecha_envio,hora_envio,message,coin,responser)
+                # el mensaje va con IMAGEN
+                if request.files['file1']:
+                    file1 = request.files['file1']
+                    path = os.path.join(
+                        app.config['UPLOAD_FOLDER'], file1.filename)
+                    file1.save(path)
+                    nameimg = path
+                    # preguntemos si el mensaje es dirigido a todos los de la region
+                    if(region == "All" and category=="All"):
+                        for i in range(len(data)):
+                            envio_msjIMG(data[i]['ID_Chat'], message, nameimg)
+                    if(region =="All" and category!="All"):
+                        for i in range(len(data)):
+                            if(category == data[i]['Category']):
+                                envio_msjIMG(data[i]['ID_Chat'],message,nameimg)
+                    if(region!="All" and category=="All"):
+                        for i in range(len(data)):
+                            if(region == data[i]['Site']):
+                                envio_msjIMG(data[i]['ID_Chat'],message,nameimg)
+                    if(region!="All" and category!="All"):
+                        for i in range(len(data)):
+                            if(region == data[i]['Site'] and category == data[i]['Category']):
+                                envio_msjIMG(data[i]['ID_Chat'],message,nameimg)
+                    
+                # el mensaje va SIN IMAGEN
+                else:
+                    # es mensaje dirigido a todos
+                    if(region == "All" and category=="All"):
+                        for i in range(len(data)):
+                            envio_msj(data[i]['ID_Chat'], message)
+                            print(i)
+                    if(region =="All" and category!="All"):
+                        for i in range(len(data)):
+                            if(category == data[i]['Category']):
+                                envio_msj(data[i]['ID_Chat'],message)
+                    if(region!="All" and category=="All"):
+                        for i in range(len(data)):
+                            if(region == data[i]['Site']):
+                                envio_msj(data[i]['ID_Chat'],message)
+                    if(region!="All" and category!="All"):
+                        for i in range(len(data)):
+                            if(region == data[i]['Site'] and category == data[i]['Category']):
+                                envio_msj(data[i]['ID_Chat'],message)
         
-           
+        
+    return render_template('index.html')
 
-    return render_template('index.html', lista_con_info = lista_con_info)
